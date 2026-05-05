@@ -2,7 +2,5 @@
   "$schema": "https://likec4.dev/schemas/config.json",
   "name": "NDS",
   "title": "NDS Architecture C4 Diagrams",
-  "manualLayouts": {
-    "outDir": ".likec4"
-  }
+  "projects": [ ]
 }
