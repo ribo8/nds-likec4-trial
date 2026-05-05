@@ -1,0 +1,179 @@
+model {
+    nhsOnline -> nds {
+        title 'Request diagnostic test'
+        technology 'FHIR R4 UK Core, REST API'
+    }
+
+    nhsApp -> nds {
+        title 'Request diagnostic test results'
+    }
+
+    patient -> nhsApp {
+        title 'Manage Diagnostic tests'
+    }
+
+    patientProxy -> nhsApp {
+        title 'Manage Diagnostic tests'
+    }
+
+    nds -> nhsNotify {
+        title 'Send patient communications'
+        technology 'JSON, REST API, Application Restricted JWT'
+    }
+
+    nds -> pds {
+        title 'Query patient demographics'
+        technology 'FHIR R4 UK Core, REST API'
+    }
+
+    nds -> pdm  {
+        title 'Store and retrieve diagnostic test data'
+        technology 'FHIR R4, REST API'
+    }
+
+    orderCommsOrdering -> nds {
+        title 'Send test orders'
+        technology 'FHIR R4, REST API'
+    }
+
+    nds -> cdc.orderCommsLab {
+        title 'Route test order to correct lab'
+        technology 'FHIR R4, REST API'   
+    }
+
+    requestingClinician -> orderCommsOrdering {
+        title 'Place test order'
+    }
+
+    requestingClinician -> nhsOnline {
+        title 'Uses'
+    }
+
+    nhsApp -> BaRSProxy {
+        title 'Manage Appointments'
+        technology 'FHIR R4, REST API'
+    }
+
+    BaRSProxy -> cdc.cdcAppointmentMangement {
+        title 'Proxy appointment management requests and referals to CDC Appointment Management'
+        technology 'FHIR R4, REST API'
+    }
+
+    nds -> BaRSProxy {
+        title 'Refer patients to CDC'
+        technology 'FHIR R4, REST API'
+    }
+
+    nds -> testCatalogue {
+        title 'Maintain list of available diagnostic tests and associated metadata'
+        technology 'FHIR R4, REST API'
+     }
+
+     orderCommsOrdering -> testCatalogue {
+        title 'Synchronize available diagnostic tests and associated metadata'
+        technology 'FHIR R4, REST API'
+     }
+
+     patient -> nhsLogin {
+        title 'Authenticate'
+        technology 'OAuth 2.0, OpenID Connect'
+     }
+     patientProxy -> nhsLogin {
+        title 'Authenticate'
+        technology 'OAuth 2.0, OpenID Connect'
+     }  
+
+     nds -> nhsLogin {
+        title 'Validate authentication tokens'
+        technology 'OAuth 2.0, OpenID Connect'
+     }
+
+     nds -> cis2 {
+        title 'Validate clinician authentication tokens'
+        technology 'OAuth 2.0, OpenID Connect'
+     }
+
+     requestingClinician -> cis2 {
+        title 'Authenticate'
+        technology 'OAuth 2.0, OpenID Connect'
+     }  
+
+     cdc.orderCommsLab -> cdc.lims {
+        title 'Send test orders to lab workflow'
+        technology 'HL7v2'
+     }
+
+     cdc.lims -> cdc.orderCommsLab {
+        title 'Return test results'
+        technology 'HL7v2'
+     }
+
+     cdc.orderCommsLab -> pdm {
+        title 'Send test results data'
+        technology 'FHIR R4, REST API'
+     }
+
+    nhsOnline -> orderCommsOrdering {
+        title 'Uses'
+    }
+
+    nds -> uecDOS {
+        title 'Query for CDCs and their available services'
+        technology 'REST API'
+    }   
+
+    nir -> cdc.pacs {
+        title 'Query/Retrieve imaging data'
+        technology 'DICOM, IHE'
+    }
+
+    nhsOnline -> nir {
+        title 'Query for imaging results'
+        technology 'DICOM, IHE'
+    }
+
+    nhsOnline -> nrl {
+        title 'Query for lab results'
+        technology 'FHIR R4, REST API'
+    }
+
+    nhsOnline -> nhsOnlineImageViewer {
+        title 'View diagnostic images'
+    }
+
+    nhsOnlineImageViewer -> nir {
+        title 'Retrieve imaging data for viewing'
+        technology 'DICOM, IHE'
+    }
+
+    nds -> mns {
+        title 'Consume events'
+        technology 'FHIR R4, REST API'
+    }
+
+    cdc.orderCommsLab -> cdc.ris {
+        title 'Send test orders to radiology workflow'
+        technology 'HL7v2'
+     }
+
+     cdc.ris -> cdc.orderCommsLab {
+        title 'Return test results'
+        technology 'HL7v2'
+     }
+
+     cdc.ris -> cdc.pacs {
+        title 'Forward order requests'
+        technology '?'
+     }
+
+
+    nhsNotify -> patient {
+        title 'Send notifications'
+        technology 'Email, SMS, Letter'
+    }
+
+    nhsNotify -> nhsApp {
+        title 'Send notifications'
+        technology 'Push Notifications'
+    }
+}

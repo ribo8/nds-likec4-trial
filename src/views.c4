@@ -1,0 +1,7 @@
+views {
+  view index {
+        title 'Landscape View - NDS'
+        include *
+        include cdc.*
+    }
+}

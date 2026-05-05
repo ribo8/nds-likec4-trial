@@ -1,0 +1,14 @@
+model {
+    patient = citizen {
+        title 'Patient'
+    }
+    
+    patientProxy = citizen {
+        title 'Patient Proxy'
+    }
+
+    requestingClinician = clinican {
+        title 'Requesting Clinician'
+    }
+    
+}

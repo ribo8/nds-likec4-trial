@@ -1,0 +1,47 @@
+specification {
+    
+    element softwareSystem
+    element component
+    element database {
+        style {
+            shape storage
+            color sky
+        }
+    }
+    element externalSystem {
+        style {
+            color gray
+        }
+    }
+
+    element authenticationProvider {
+        style {
+            icon tech:oauth
+            color indigo
+        }
+    }
+
+    element citizen {
+        style {
+            shape person
+            color amber
+        }
+        
+    }
+
+    element clinican {
+        style {
+            shape person
+            color green
+        }
+    }
+
+    element careSetting {
+        style {
+            opacity 50%
+            border dashed 
+            color blue
+            multiple true
+        }
+    }
+}
