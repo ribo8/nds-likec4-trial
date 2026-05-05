@@ -3,5 +3,6 @@ views {
         title 'Landscape View - NDS'
         include *
         include cdc.*
-    }
+    	autoLayout TopBottom
+	}
 }
