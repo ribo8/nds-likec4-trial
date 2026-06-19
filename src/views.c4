@@ -7,6 +7,12 @@ views {
         include diagnosticCentreType1.*
 	}
 
+  view topLevelLandscpeView {
+    title 'Top Level Landscape View'
+    include *
+
+  }
+
   view testOrderingView {
     title 'Diagnostic Test Ordering View'
     include patient
@@ -37,6 +43,6 @@ views {
 
   view testResultsView {
     title 'Diagnostic Test Results'
-    include
+   // include
   }
 }

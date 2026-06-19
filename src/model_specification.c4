@@ -4,7 +4,7 @@ specification {
 
     element api {
         style {
-            icon tech:OpenAPI
+          //  icon tech:OpenAPI
             color amber
         }
     }
