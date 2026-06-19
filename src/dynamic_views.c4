@@ -1,15 +1,15 @@
-/* 
+
 views {
     dynamic view testOrder {
         title 'Dynamic View - Test Ordering - Pathology/LIMS'
         parallel {
             
-            orderCommsOrdering -> nds {
+            nhsOnline -> nds {
                 title 'Send test order'
                 technology 'FHIR R4, REST API'
             }
 
-            ndsPortal -> nds {
+            ndsOrderCommsPortal -> nds {
                 title 'Send test order from NDS Portal'
                 technology 'FHIR R4, REST API'
             }
@@ -20,27 +20,27 @@ views {
             technology 'FHIR R4, REST API'
         }
 
-        diagnosticTestTracking -> mns {
+        taskingSolution -> mns {
             title 'Subscribe to test order status updates event'
             technology 'FHIR R4, REST API'
         } 
 
-        cdc.lims -> mns {
+        diagnosticCentreType1.lims -> mns {
             title 'Subscribe to new test requests event'
             technology 'FHIR R4, REST API'
         }
 
-        cdc.lims -> nds {
+        diagnosticCentreType1.lims -> nds {
             title 'Request test order details'
             technology 'FHIR R4, REST API'
         }
 
-        cdc.lims -> mns {
+        diagnosticCentreType1.lims -> mns {
             title 'Publish test order status updates event'
             technology 'FHIR R4, REST API'
         }
     }
-
+/* 
     dynamic view testResults {
         title 'Dynamic View - Test Results - Pathology/LIMS'
         
@@ -125,5 +125,6 @@ views {
         
     
     }
+        */
 }
-    */
+    
