@@ -278,15 +278,22 @@ model {
         title 'Request test results'
     }
     diagnosticCentreType1.orderCommsLab -> ndsDoS.ndsDoSFHIRAPI {
-        title ' title 'Request test catalogue'
+        title 'Request test catalogue'
+
+        
+    }
+    diagnosticCentreType1.orderCommsLab -> mns {
+        title 'Create/Consume events'
     }
 
+
+    
     ndsOrderCommsPortal -> cis2 {
         title 'Validates authentication'
     }
 
     ndsOrderCommsPortal -> ndsDoS.ndsDoSFHIRAPI {
-        title 'title 'Request test catalogue'
+        title  'Request test catalogue'
     }
 
     ndsOrderCommsPortal -> nds.testRequestFHIRAPI {
@@ -295,6 +302,10 @@ model {
 
     ndsOrderCommsPortal -> nds.testRequestFHIRAPI {
         title 'Retrieve test results'
+    }
+
+    ndsOrderCommsPortal -> mns {
+        title 'Create/Consume events'
     }
     
     /* NDS */

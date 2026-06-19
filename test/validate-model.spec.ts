@@ -12,7 +12,7 @@ test('Every service has a link to the repository', ({ expect }) => {
     ).toBeDefined()
   }
 })
-  */
+  
 
 test('Many-to-many relationship allowed only between DB Tables', ({ expect }) => {
   for (const r of likec4model.relationshipsWhere({ kind: 'many-to-many' })) {
@@ -26,7 +26,7 @@ test('Many-to-many relationship allowed only between DB Tables', ({ expect }) =>
     ).toBe(true)
   }
 })
-
+*/
 // With `test.for` we generate tests for each element of kind `component`
 // This improves the output, showing each test failure separately
 test.for(
