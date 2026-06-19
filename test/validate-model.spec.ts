@@ -1,5 +1,5 @@
-import { test } from 'vitest'
-import { likec4model } from './likec4-model'
+//import { test } from 'vitest'
+//import { likec4model } from './likec4-model'
 
 /*
 test('Every service has a link to the repository', ({ expect }) => {
