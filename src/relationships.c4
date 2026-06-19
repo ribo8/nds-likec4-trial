@@ -240,12 +240,13 @@ model {
     }
 
     nhsOnline -> ndsDoS.ndsDoSFHIRAPI {
-        navigateTo apiManagementTestRequestAPIDynamicView
+       
         title 'Request test catalogue'
         technology 'FHIR R4 UK Core'
     }
     
     nhsOnline -> nds.testRequestFHIRAPI {
+        navigateTo apiManagementTestRequestAPIDynamicView
         title 'Request diagnostic test'
         technology 'FHIR R4 UK Core'
     }
