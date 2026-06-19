@@ -1,0 +1,129 @@
+/* 
+views {
+    dynamic view testOrder {
+        title 'Dynamic View - Test Ordering - Pathology/LIMS'
+        parallel {
+            
+            orderCommsOrdering -> nds {
+                title 'Send test order'
+                technology 'FHIR R4, REST API'
+            }
+
+            ndsPortal -> nds {
+                title 'Send test order from NDS Portal'
+                technology 'FHIR R4, REST API'
+            }
+        }
+
+        nds -> mns {
+            title 'Publish new test requests event'
+            technology 'FHIR R4, REST API'
+        }
+
+        diagnosticTestTracking -> mns {
+            title 'Subscribe to test order status updates event'
+            technology 'FHIR R4, REST API'
+        } 
+
+        cdc.lims -> mns {
+            title 'Subscribe to new test requests event'
+            technology 'FHIR R4, REST API'
+        }
+
+        cdc.lims -> nds {
+            title 'Request test order details'
+            technology 'FHIR R4, REST API'
+        }
+
+        cdc.lims -> mns {
+            title 'Publish test order status updates event'
+            technology 'FHIR R4, REST API'
+        }
+    }
+
+    dynamic view testResults {
+        title 'Dynamic View - Test Results - Pathology/LIMS'
+        
+        cdc.lims -> cdc.middleware {
+            title 'Publish test results'
+            technology 'HL7v2'
+        }
+        parallel {
+            
+        
+            cdc.middleware -> pathologyAPI {
+                title 'Send pathology test results'
+                technology 'FHIR R4, REST API'
+
+            }
+            cdc.middleware -> orderCommsOrdering {
+                title 'Send lab test results'
+                
+            }
+       }
+
+       pathologyAPI -> mns {
+            title 'Publish test results available event'
+            technology 'FHIR R4, REST API'
+       }
+
+       diagnosticTestTracking -> mns {
+            title 'Subscribe to test order status updates event'
+            technology 'FHIR R4, REST API'
+        } 
+
+    
+        resultsConsumingSystem -> mns {
+            title 'Subscribe to test results available event'
+            technology 'FHIR R4, REST API'
+        }
+        
+        resultsConsumingSystem -> pathologyAPI {
+            title 'Request test results'
+            technology 'FHIR R4, REST API'
+        }
+
+        resultsConsumingSystem -> nhsNotify
+        {
+            title 'Send test results notification to patient'
+            technology 'FHIR R4, REST API'
+        }
+
+        nhsNotify -> nhsApp {
+            title 'Send test results notification to patient'
+            technology 'FHIR R4, REST API'
+        }
+
+        nhsApp -> resultsConsumingSystem {
+            title 'Allow patient to view test results in NHS App'
+            
+        }
+        
+    }
+
+    dynamic view providerSelection {
+        title 'Provider Selection'
+        
+        nhsApp -> nds {
+            title 'Retrieve patient test orders'
+            technology 'FHIR R4, REST API'
+        }
+
+        nhsApp -> nds {
+            title 'Retrieve list of providers'
+        }
+
+        nds -> ndsDoS { 
+            title 'Retrieve list of providers for the selected test'
+            technology 'FHIR R4, REST API'
+        }
+
+        ndsDoS -> ndsTestCatalogue {
+            title 'Retrieve list of tests and associated metadata to support provider selection'
+            technology 'FHIR R4, REST API'
+        }
+        
+    
+    }
+}
+    */

@@ -15,11 +15,11 @@ model {
     pds = externalSystem {
         title 'Personal Demographics Service (PDS)'
     }
-
+/* to remove? 
     uecDOS = externalSystem {
         title 'UEC Directory of Services (DOS)'
     }      
-
+*/
     nhsOnline = externalSystem {
         title 'NHS Online'
     }   
@@ -37,12 +37,14 @@ model {
         title 'NHS Notify'
     }
 
+    /*  to remove
     orderCommsOrdering = externalSystem {
         title 'Order Comms - Test Ordering'
     }
+        */
 
-    nhsOnlineImageViewer = externalSystem {
-        title 'NHS Online Image Viewer'
+    nhsOnlinePACS = externalSystem {
+        title 'NHS Online Picture archiving and communication system (PACS)'
     }
 
 
@@ -67,5 +69,13 @@ model {
 
     mns = externalSystem {
         title 'Message Notification Service (MNS)'
-    }   
+    }  
+    
+    taskingSolution = externalSystem {
+        title 'Tasking Solution'
+    }
+
+    wayfinder = externalSystem {
+        title 'Wayfinder'
+    }
 }

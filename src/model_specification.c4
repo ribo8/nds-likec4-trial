@@ -1,6 +1,14 @@
 specification {
     
     element softwareSystem
+
+    element api {
+        style {
+            icon tech:OpenAPI
+            color amber
+        }
+    }
+
     element component
     element database {
         style {
@@ -44,4 +52,8 @@ specification {
             multiple true
         }
     }
+
+    tag testRequestTag
+    tag appointmentManagementTag
+    tag testResultsTag
 }

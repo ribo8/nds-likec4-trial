@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor patient as Patient
+    participant nhsAppointmentBookingService as NHS Appointment Booking Service
+    participant serviceSelection as Service Selection
+    participant nds as National Diagnostic Service (NDS)
+    participant pds as Personal Demographics Service (PDS)
+    participant ndsDos as NDS Directory of Services (NDS Dos)
+    participant journeyTracking as Journery Tracking Solution
+    participant pds as Personal Demographics Service (PDS)
+    participant mns as Message Notification Service (MNS)
+    participant barsProxy as BARS Proxy
+    participant appointmentProvider as Care Setting Appointment Solution
+    participant LIMS as Laboratory Information Management System (LIMS) / Radiology Information System (RIS) 
+
+    patient ->>+ nhsAppointmentBookingService: Route patient to appointment booking service
+    nhsAppointmentBookingService ->>+ serviceSelection: Request diagnostic test provider list with search criteria (e.g. location)
+    serviceSelection ->>+ nds: Request diagnostic test provider list with search criteria (e.g. location)
+    nds ->>+ pds: Request patient demographics
+    pds -->>- nds: Return patient demographics
+    nds ->>+ ndsDos: Request provider list including search criteria and patient demographics
+    ndsDos -->>- nds: Return provider list
+    nds -->>- serviceSelection: Return provider list
+    serviceSelection -->>- nhsAppointmentBookingService: Return provider list
+    loop Every Provider
+            nhsAppointmentBookingService ->>+ barsProxy: Request available appointments for provider
+            barsProxy ->>+ appointmentProvider: Request available appointments for provider
+            appointmentProvider -->>- barsProxy: Return available appointments for provider
+            barsProxy -->>- nhsAppointmentBookingService: Return available appointments for provider
+    end
+    nhsAppointmentBookingService -->>- patient : Display available providers and appointments to patient
+    patient ->>+ nhsAppointmentBookingService: Patient selects appointment at their chosen provider
+    nhsAppointmentBookingService ->>+ barsProxy: Book appointment with provider
+    barsProxy ->>+ appointmentProvider: Book appointment with provider
+    appointmentProvider -->>- barsProxy: Return appointment booked confirmation
+    barsProxy -->>- nhsAppointmentBookingService: Return appointment booked confirmation
+    nhsAppointmentBookingService -->>- patient: Return appointment booked confirmation 
+    nhsAppointmentBookingService ->>+ mns: New patient appointment event
+    mns -->- nhsAppointmentBookingService: Nofity of event creation
+    par MNS event to NDS
+        mns ->> nds: Notify diagnostic service of new patient appointment
+        nds ->>+ journeyTracking : Update journey tracking status of appointment booking
+        journeyTracking -->>- nds : Confirm notification received 
+    and MNS event to LIMS
+        mns ->> LIMS: Notify diagnostic service of new patient appointment
+        LIMS ->> nds : Retrieve diagnostic test order
+        nds ->>+ journeyTracking : Update journey tracking status of booking with LIMS/RIS
+        journeyTracking -->>- nds : Confirm notification received
+    end

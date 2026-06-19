@@ -10,5 +10,13 @@ model {
     requestingClinician = clinican {
         title 'Requesting Clinician'
     }
-    
+
+    nhsoClincian = clinican {
+        #testRequestTag
+        title 'NHS Online Clinican'
+    }
+
+    diagnosticCentreClinican = clinican {
+        title 'Diangostic Centre Clinican'
+    }
 }

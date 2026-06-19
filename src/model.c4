@@ -1,18 +1,106 @@
 model {
     nds = softwareSystem {
+        #testRequestTag
         title 'NDS'
         technology 'AWS, FHIR R4, REST API'
+    
+    
+        testRequestFHIRAPI = api {
+            #testRequestTag
+            title 'Diagnostic Test Request FHIR API'
+            technology 'FHIR R4 UK Core'
+        
+        }
+
+        testRequestOrchestrator = component {
+            #testRequestTag
+            title 'Diagnostic Test Request Orchestrator'
+            description 'Orchestration for diagnostic test requests'
+        }
+
+        testResultsFHIRAPI = api {
+            title 'Diagnostic Test Results FHIR API'
+            technology 'FHIR R4 UK Core'
+        }
+        testResultsOrchestrator = component {
+            title 'Diagnostic Test Results Orchestrator'
+
+        }
+
+        appointmentBookingOrchestrator = component {
+            #appointmentManagementTag
+            title 'Diagnostic Test Appointment Booking Orchestrator'
+        }
+
+        taskmanagement = component {
+            #testRequestTag, #appointmentManagementTag
+            title 'Task Management'
+        }
+
+        patientNotifications = component {
+            #testRequestTag, #appointmentManagementTag
+            title 'Patient Notifications'
+        }
+
+        eventManagement = component {
+            #appointmentManagementTag
+            title 'Event Management'
+        }
+        
     } 
 
-    testCatalogue = softwareSystem {
-        title 'Test Catalogue'
+
+    pathologyAPI = softwareSystem {
+        title 'Pathology API'
+        technology 'FHIR R4, REST API'
+    }
+/*  to remove?
+    resultsConsumingSystem = softwareSystem {
+        title 'Results Consuming System'
+        description 'e.g GP System, NHS Online, etc'
+    }
+*/
+    ndsOrderCommsPortal = softwareSystem {
+        title 'NDS Order Comms Portal'
+        description 'Low bar entry solution for care settings without their own system to interact with NDS'
+        technology 'Web Application'
     }
 
-    cdc = careSetting {
-        title 'Community Diagnostic Centre (CDC)'
+    ndsDoS = softwareSystem {
+        #testRequestTag
+        title 'NDS Directory of Services (DoS)'
+
+        ndsDoSFHIRAPI = api {
+            #testRequestTag, #appointmentManagementTag
+            title 'NDS DoS FHIR API'
+        }
+
+
+        businessLogic = component {
+
+            title 'NDS DoS business logic'
+        }
+        
+        testCatalogue = database {
+
+            title 'Test Catalogue'
+        }
+
+        providerCatalogue = database {
+
+            title 'Provider Catalogue'
+        }
+
+
+
+    }
+
+
+    diagnosticCentreType1 = careSetting {
+        title 'Diagnostic Centre - Type 1'
     
-        cdcAppointmentMangement = softwareSystem {
-            title 'CDC Appointment Management'
+        diagnosticCentreAppointmentMangement = softwareSystem {
+            title 'Diagnostic Centre Appointment Management'
         }
 
         orderCommsLab = softwareSystem {
@@ -29,6 +117,11 @@ model {
 
         ris = softwareSystem {
             title 'Radiology Information System (RIS)'
+        }
+
+        middleware = softwareSystem {
+            title 'Middleware'
+            description 'eg Clinisys/Keystone/etc'
         }
 
     }

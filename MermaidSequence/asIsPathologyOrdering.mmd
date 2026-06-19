@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant EPR
+    participant Middleware
+    participant OrderComms
+    participant TIE
+    participant LIMS
+    EPR->> OrderComms: Open OrderComms 
+    activate LIMS
+    OrderComms->>LIMS: Lab Order Message (HL7v2/Bespoke)
+    LIMS->>OrderComms: Test Results (HL7v2/Bespoke)
+    deactivate LIMS
+    OrderComms->>Middleware: Results Shared (HL7v2)
+    Middleware->>EPR: Results Shared (EDIFACT/FHIR R4)

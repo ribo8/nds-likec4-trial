@@ -2,6 +2,41 @@ views {
   view index {
         title 'Landscape View - NDS'
         include *
-        include cdc.*
+        include nds.*
+        include ndsDoS.*
+        include diagnosticCentreType1.*
 	}
+
+  view testOrderingView {
+    title 'Diagnostic Test Ordering View'
+    include patient
+    include nhsOnline, cis2, pdm, taskingSolution, nhsApp, nhsNotify
+    include element.tag = #testRequestTag
+  }
+
+  view testAppointmentBookingView {
+    title 'Diagnostic Test Apppointment Booking'
+    include patient
+    include nhsApp, wayfinder, nhsNotify, BaRSProxy
+    include taskingSolution, mns
+    include diagnosticCentreType1.diagnosticCentreAppointmentMangement
+
+    include element.tag = #appointmentManagementTag
+  }
+
+  view testAppointmentBookingAndOrderLinkView {
+    title 'Diagnostic Test Apppointment and Ordering Link Booking'
+    include patient
+    include nhsApp, wayfinder, nhsNotify, BaRSProxy
+    include taskingSolution, mns
+    include diagnosticCentreType1.diagnosticCentreAppointmentMangement
+    include diagnosticCentreType1.lims, diagnosticCentreType1.ris
+    include nds.testRequestFHIRAPI
+    include element.tag = #appointmentManagementTag
+  }
+
+  view testResultsView {
+    title 'Diagnostic Test Results'
+    include
+  }
 }

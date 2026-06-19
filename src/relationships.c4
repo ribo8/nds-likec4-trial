@@ -1,3 +1,4 @@
+/*
 model {
     nhsOnline -> nds {
         title 'Request diagnostic test'
@@ -64,12 +65,12 @@ model {
         technology 'FHIR R4, REST API'
     }
 
-    nds -> testCatalogue {
+    nds -> ndsTestCatalogue {
         title 'Maintain list of available diagnostic tests and associated metadata'
         technology 'FHIR R4, REST API'
      }
 
-     orderCommsOrdering -> testCatalogue {
+     orderCommsOrdering -> ndsTestCatalogue {
         title 'Synchronize available diagnostic tests and associated metadata'
         technology 'FHIR R4, REST API'
      }
@@ -175,5 +176,307 @@ model {
     nhsNotify -> nhsApp {
         title 'Send notifications'
         technology 'Push Notifications'
+    }
+}
+
+*/
+
+model {
+
+    /* NHS App interactions */
+    patient -> nhsApp {
+        title 'Uses'
+    }
+
+    patient -> nhsLogin {
+        title 'Authenticates'
+    }
+
+    patientProxy -> nhsApp {
+        title 'Uses'
+    }
+
+    patientProxy -> nhsLogin {
+        title 'Authenticates'
+    }
+
+    nhsApp -> nhsLogin {
+        title 'Validate authentication'
+    }
+
+    nhsApp -> taskingSolution {
+        title 'Manage patient tasks'
+    }
+
+    nhsNotify -> nhsApp {
+        title 'Push notifications'
+    }
+
+    nhsApp -> wayfinder {
+        title 'Manage appointments'
+    }
+
+    /* NHS Online */
+
+    nhsoClincian -> cis2 {
+        title 'Authenticate clinican'
+    }
+
+    nhsOnline -> cis2 {
+        title 'Validate authentication'
+    }
+
+    nhsoClincian -> nhsOnline {
+        title 'Uses'
+    }
+
+    nhsoClincian -> nhsOnlinePACS {
+        title 'Uses'
+    }
+
+    nhsOnlinePACS -> nir {
+        title 'Query/Retrieve diagnostic images'
+        technology 'IHE'
+    }
+
+    nhsOnline -> ndsDoS.ndsDoSFHIRAPI {
+        title 'Request test catalogue'
+        technology 'FHIR R4 UK Core'
+    }
+    
+    nhsOnline -> nds.testRequestFHIRAPI {
+        title 'Request diagnostic test'
+        technology 'FHIR R4 UK Core'
+    }
+
+    nhsOnline -> mns {
+        title 'Create/Consume events'
+    }
+
+    nhsOnline -> nds.testResultsFHIRAPI {
+        title 'Retrieve test results'
+    }
+
+    /* NDS portal */
+    requestingClinician -> ndsOrderCommsPortal {
+        title 'uses'
+    }
+    
+    requestingClinician -> cis2 {
+        title 'Authenticates'
+    }
+
+    requestingClinician -> diagnosticCentreType1.orderCommsLab {
+        title 'Request diagnostic test'
+    }
+
+    diagnosticCentreType1.orderCommsLab -> nds.testRequestFHIRAPI {
+        title 'Create test request'
+    }
+
+    diagnosticCentreType1.orderCommsLab -> nds.testResultsFHIRAPI {
+        title 'Request test results'
+    }
+    diagnosticCentreType1.orderCommsLab -> ndsDoS.ndsDoSFHIRAPI {
+        title ' title 'Request test catalogue'
+    }
+
+    ndsOrderCommsPortal -> cis2 {
+        title 'Validates authentication'
+    }
+
+    ndsOrderCommsPortal -> ndsDoS.ndsDoSFHIRAPI {
+        title 'title 'Request test catalogue'
+    }
+
+    ndsOrderCommsPortal -> nds.testRequestFHIRAPI {
+        title 'Create test request'
+    }
+
+    ndsOrderCommsPortal -> nds.testRequestFHIRAPI {
+        title 'Retrieve test results'
+    }
+    
+    /* NDS */
+    nds.testRequestFHIRAPI -> cis2 {
+        title 'Validate authentication'
+    }
+
+    nds.testRequestFHIRAPI -> nds.testRequestOrchestrator {
+        title 'uses'
+    }
+
+    nds.testRequestOrchestrator -> pdm {
+        title 'Read/Write test requests'
+    }
+
+    nds.testRequestOrchestrator -> nds.patientNotifications {
+        title 'Notify patient'
+    }
+
+    nds.testRequestOrchestrator -> nds.eventManagement {
+        title 'Manage events'
+    }
+
+    nds.testRequestOrchestrator -> nds.taskmanagement {
+        title 'Manage diagnostic test tasks'
+    }
+
+   
+    nds.testResultsFHIRAPI -> nds.testResultsOrchestrator {
+        title 'uses'
+    }
+
+    nds.testResultsOrchestrator -> pdm {
+        title 'Read/Write test results'
+    }
+
+    nds.testRequestOrchestrator -> pathologyAPI {
+        title 'Route pathology results'
+    }
+    pathologyAPI -> pdm {
+        title 'Read/Write pathology results'
+    }
+
+    nds.testResultsOrchestrator -> nds.patientNotifications {
+        title 'Notify Patient'
+    }
+
+    nds.testResultsOrchestrator -> nds.eventManagement {
+        title 'Manage events'
+    }
+
+    nds.testResultsOrchestrator -> nds.taskmanagement {
+        title 'Manage diagnostic test tasks'
+    }
+
+    nds.testResultsOrchestrator -> nrl {
+        title 'Retrieve diagnostic test result image pointers'
+    }
+
+    nds.testResultsOrchestrator -> nir {
+        title 'Retieve diagnostic test result images'
+    }
+
+    nds.appointmentBookingOrchestrator -> nds.eventManagement {
+        title 'Manage events'
+    }
+
+    nds.appointmentBookingOrchestrator -> nds.patientNotifications {
+        title 'Notify patient'
+    }
+
+    nds.appointmentBookingOrchestrator -> nds.taskmanagement {
+        title 'Manage diagnotic test tasks'
+    }
+
+     nds.patientNotifications -> nhsNotify {
+        title 'Notify patient'
+    }
+
+    nds.eventManagement -> mns {
+        title 'Create/Consume events'
+    }
+
+
+    nds.taskmanagement -> taskingSolution {
+        title 'Manage diagnostic test tasks'
+    }
+
+    /* Diagnostic Centre */
+
+    diagnosticCentreType1.lims -> mns {
+        title 'Create/Consume events'
+    }
+    
+    diagnosticCentreType1.lims -> nds.testRequestFHIRAPI {
+        title 'Retrieve test requests'
+    }
+
+    diagnosticCentreType1.ris -> mns {
+        title 'Create/Consume events'
+    }
+
+    diagnosticCentreType1.ris -> nds.testRequestFHIRAPI {
+        title 'Retrieve test requests'
+    }
+
+    
+    /* tasking solution */
+    taskingSolution -> pdm {
+        title 'Read/Write tasks'
+    }
+
+    /* Appointments */
+    wayfinder -> BaRSProxy {
+        title 'Manage appointments'
+    }
+
+    BaRSProxy -> diagnosticCentreType1.diagnosticCentreAppointmentMangement {
+        title 'Manage appointments'
+    }
+
+    wayfinder -> ndsDoS.ndsDoSFHIRAPI {
+        title 'Retrieve Providers'
+    }
+
+    wayfinder -> nhsLogin {
+        title 'Validate authentication'
+    }
+
+    wayfinder -> mns {
+        title 'Create/Retrieve events'
+    }
+    
+    /* Internal worksings of NDS */
+
+
+    /* Internal workings of DoS */
+    ndsDoS.ndsDoSFHIRAPI -> ndsDoS.businessLogic {
+        title 'Work stuff out'
+    }
+
+    ndsDoS.businessLogic -> ndsDoS.providerCatalogue {
+        title 'Retrieve providers'
+    }
+
+    ndsDoS.businessLogic -> ndsDoS.testCatalogue {
+        title 'Retrieve diagnostic tests'
+    }
+
+    ndsDoS.businessLogic -> pds {
+        title 'Retrieve patient demographics'
+    }
+
+    /* Results */
+    diagnosticCentreType1.ris -> diagnosticCentreType1.pacs {
+        title 'Manage diagnostic images'
+    }
+
+    nir -> diagnosticCentreType1.pacs {
+        title 'Search/Retrieve diagnostic images and reports'
+    }
+
+    diagnosticCentreType1.lims -> nds.testResultsFHIRAPI {
+        title 'Write test results'
+    }
+
+    /* Lab clinicans */
+    diagnosticCentreClinican -> diagnosticCentreType1.lims {
+        title 'uses'
+    }
+    diagnosticCentreClinican -> diagnosticCentreType1.ris {
+        title 'uses'
+    }
+    diagnosticCentreClinican -> diagnosticCentreType1.diagnosticCentreAppointmentMangement {
+        title 'uses'
+    }
+    diagnosticCentreClinican -> diagnosticCentreType1.pacs {
+        title 'uses'
+    }
+
+    /* NIR */
+    nir -> nrl {
+        title 'Manage test result pointers'
     }
 }
