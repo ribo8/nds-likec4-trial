@@ -1,5 +1,7 @@
-//import { test } from 'vitest'
-//import { likec4model } from './likec4-model'
+import { test } from 'vitest'
+import { likec4model } from './likec4-model'
+
+//test('Dummy test', ({expect}) expect.hasAssertions())
 
 /*
 test('Every service has a link to the repository', ({ expect }) => {
@@ -26,15 +28,14 @@ test('Many-to-many relationship allowed only between DB Tables', ({ expect }) =>
     ).toBe(true)
   }
 })
-
+*/
 // With `test.for` we generate tests for each element of kind `component`
 // This improves the output, showing each test failure separately
 test.for(
   // Select elements of kind `app`
-  [...likec4model.elementsWhere({ kind: 'component' })]
+  [...likec4model.elementsWhere({ kind: 'actor' })]
     // Map to array of [id, element] tuples, we need it for test names
     .map(e => [e.id, e] as const)
 )('Component "%s" has technology', ([, e], { expect }) => {
   expect(e.technology).toBeTruthy()
 })
-*/
