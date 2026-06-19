@@ -1,5 +1,17 @@
 
 views {
+
+    dynamic view apiManagementTestRequestAPIDynamicView {
+        title 'API-Management'
+        include apiManagement
+        nhsOnline -> apiManagement.ndsTestAPIProxy 'Call API-M'
+        apiManagement.ndsTestAPIProxy -> apiManagement.authorisationServer 'Validate'
+        apiManagement.authorisationServer -> cis2 'Validate token'
+        apiManagement.ndsTestAPIProxy -> nds.testRequestFHIRAPI 'Call NDS'
+
+        
+        
+    }
     dynamic view testOrder {
         title 'Dynamic View - Test Ordering - Pathology/LIMS'
         parallel {

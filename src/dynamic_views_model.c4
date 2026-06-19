@@ -1,0 +1,13 @@
+model {
+    apiManagement = softwareSystem {
+        title 'Apigee API-M'
+
+        ndsTestAPIProxy = component {
+            title 'NDS Test API proxy'
+        }
+
+        authorisationServer = component {
+            title 'Auth server'
+        }
+    }
+}
