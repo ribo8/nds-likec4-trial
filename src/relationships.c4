@@ -340,6 +340,10 @@ model {
         title 'uses'
     }
 
+    nds.testResultsFHIRAPI -> cis2 {
+        title 'Validate authentication'
+    }
+
     nds.testResultsOrchestrator -> pdm {
         title 'Read/Write test results'
     }
@@ -364,11 +368,15 @@ model {
     }
 
     nds.testResultsOrchestrator -> nrl {
-        title 'Retrieve diagnostic test result image pointers'
+        title 'Retrieve diagnostic test result report/image pointers'
     }
 
     nds.testResultsOrchestrator -> nir {
         title 'Retieve diagnostic test result images'
+    }
+
+    nds.testResultsOrchestrator -> pathologyAPI {
+        title 'Write pathology test results'
     }
 
     nds.appointmentBookingOrchestrator -> nds.eventManagement {

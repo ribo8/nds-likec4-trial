@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor providerClinican as Provider Clinican
+    participant LIMS as LIMS
+    participant ndsResultsAPI as Test Results API
+    participant nds as National Diagnostic Service (NDS) Orchestrator
+    participant domainResultsAPI as Domain Results API
+    participant pdm as Patient Data Manager (PDM)
+    participant mns as Multicast Notification Service (MNS)
+    participant journeyTracking as Journery Tracking Solution
+
+    providerClinican ->>+ LIMS: Create diagnostic report
+    LIMS ->>+ ndsResultsAPI: Send diagnostic report
+    ndsResultsAPI ->>+ nds: Query which API to send diangostic report to
+    nds -->>- ndsResultsAPI: Receive confirmation of where to route result
+    ndsResultsAPI ->>+ domainResultsAPI: Send diagnostic report
+    domainResultsAPI ->>+ pdm: Send diangostic report
+    pdm -->- domainResultsAPI: Confirm diagnostic report stored
+    par
+        domainResultsAPI -->>- ndsResultsAPI: Confirm diagnostic report received 
+        ndsResultsAPI -->>- LIMS: Confirm diagnostic report received 
+        LIMS -->>- providerClinican: Confirm diagnostic report created 
+    
+    and Create MNS event
+        domainResultsAPI ->>+ mns: Create new diagnostic test result available event
+        mns -->>- domainResultsAPI: Confirm event created
+    end
+
+    mns->> nds: Receive  new diagnostic test result available event
+    nds ->>+ journeyTracking : Update journey tracking status of test result
+    journeyTracking -->>- nds : Confirm notification received
+
+    
+
+

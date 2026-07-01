@@ -32,7 +32,7 @@ specification {
     element citizen {
         style {
             shape person
-            color amber
+            color green
         }
         
     }

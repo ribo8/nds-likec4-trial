@@ -37,17 +37,9 @@ model {
         title 'NHS Notify'
     }
 
-    /*  to remove
-    orderCommsOrdering = externalSystem {
-        title 'Order Comms - Test Ordering'
-    }
-        */
-
     nhsOnlinePACS = externalSystem {
         title 'NHS Online Picture archiving and communication system (PACS)'
     }
-
-
 
 
     BaRSProxy = externalSystem {

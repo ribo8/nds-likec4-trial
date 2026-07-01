@@ -3,9 +3,9 @@ sequenceDiagram
     actor patient as Patient
     participant nhsApp as NHS App
     participant taskingSolution as Tasking Solution
+    participant ndsTestBooking as NDS Test Booking Solution
     participant nds as National Diagnostic Service (NDS)
-    participant nhsAppointmentBookingService as NHS Appointment Booking Service
-
+    participant ndsDos as NDS Directory of Services (NDS Dos)
 
     patient ->>+ nhsApp : Access application to view tasks
     nhsApp ->>+ taskingSolution : Request list of patient tasks
@@ -15,6 +15,9 @@ sequenceDiagram
     nhsApp ->>+ nds: Request relevent Diagnostic Test details 
     nds -->>- nhsApp: Return Diagnostic Test Details
     nhsApp ->>- patient: Display Diagnostic Test Details to patient
-    patient ->> nhsApp: Patient confirms to book diagnostic test
-    nhsApp ->> nhsAppointmentBookingService: Route patient to appointment booking service
-    
+    patient ->>+ ndsTestBooking: Patient confirms to book diagnostic test
+    ndsTestBooking ->>+ nds: Request options for relevent test
+    nds ->>+ ndsDos: Request options for selected diagnostic test (Clinic Appointments/Home Test)
+    ndsDos -->>- nds: Return options for patient
+    nds -->>- ndsTestBooking: Return options for patient
+    ndsTestBooking -->>- patient: Display options for booking to patient    

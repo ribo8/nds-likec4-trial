@@ -2,22 +2,23 @@
    autonumber
    actor orderingClinician as Ordering Clinician
    participant orderComms as Order Comms
-   participant nds as National Diagnostic Service (NDS)
+   participant nds as National Diagnostic Service (NDS) Orchestrator
+   participant journeyTracking as Journery Tracking Solution
    participant taskingSolution as Tasking Solution
    participant nhsNotify as NHS Notify
-   actor patient as Patient
-   participant journeyTracking as Journery Tracking Solution
 
+   actor patient as Patient
 
    orderingClinician ->> orderComms : Order diagnostic test for patient
    orderComms ->>+ nds : Orders diagnostic test for patient
    nds -->>- orderComms : Confirm order received
-   par NDS creates patient task for booking diagnostic test
+   par NDS notifies Journey Tracking Solution of new diagnostic test order
+      nds ->> journeyTracking : Notify of new diagnostic test order
+      journeyTracking -->> nds : Confirm notification received
+   
+   and NDS creates patient task for booking diagnostic test
       nds ->> taskingSolution : Create patient task for booking diagnostic test
       taskingSolution -->> nds : Confrim task creation
       nds ->> nhsNotify : Notify patient of booking task
       nhsNotify -) patient : Notify patient of booking task  
-   and NDS notifies Journey Tracking Solution of new diagnostic test order
-      nds ->> journeyTracking : Notify of new diagnostic test order
-      journeyTracking -->> nds : Confirm notification received
    end

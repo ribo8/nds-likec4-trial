@@ -14,7 +14,7 @@ views {
   }
 
   view testOrderingView {
-    title 'Diagnostic Test Ordering View'
+    title 'NHS Online Diagnostic Test Ordering View'
     include patient
     include nhsOnline, cis2, pdm, taskingSolution, nhsApp, nhsNotify
     include element.tag = #testRequestTag
@@ -42,7 +42,13 @@ views {
   }
 
   view testResultsView {
-    title 'Diagnostic Test Results'
-   // include
+    title 'NHS Online Diagnostic Test Results View'
+    include nhsOnline, nhsoClincian
+    include cis2, pdm, mns
+    include nir, nrl
+    include element.tag = #testResultsTag
+    include diagnosticCentreType1.lims, diagnosticCentreType1.ris, diagnosticCentreType1.pacs
+    //include diagnosticCentreClinican
+   
   }
 }

@@ -7,7 +7,7 @@ model {
     
         testRequestFHIRAPI = api {
             #testRequestTag
-            title 'Diagnostic Test Request FHIR API'
+            title 'Request a diagnostic test FHIR API'
             technology 'FHIR R4 UK Core'
         
         }
@@ -19,10 +19,12 @@ model {
         }
 
         testResultsFHIRAPI = api {
+            #testResultsTag
             title 'Diagnostic Test Results FHIR API'
             technology 'FHIR R4 UK Core'
         }
         testResultsOrchestrator = component {
+            #testResultsTag
             title 'Diagnostic Test Results Orchestrator'
 
         }
@@ -43,7 +45,7 @@ model {
         }
 
         eventManagement = component {
-            #appointmentManagementTag
+            #appointmentManagementTag, #testResultsTag
             title 'Event Management'
         }
         
@@ -51,6 +53,7 @@ model {
 
 
     pathologyAPI = softwareSystem {
+        #testResultsTag
         title 'Pathology API'
         technology 'FHIR R4, REST API'
     }

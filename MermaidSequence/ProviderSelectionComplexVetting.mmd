@@ -1,0 +1,63 @@
+sequenceDiagram
+    autonumber
+    actor patient as Patient
+    participant nhsApp as NHS App
+    participant nhsAppointmentBookingService as NHS Appointment Booking Service
+    participant serviceSelection as Service Selection
+    participant nds as National Diagnostic Service (NDS) Orchestrator
+    participant pds as Personal Demographics Service (PDS)
+    participant ndsDos as NDS Directory of Services (NDS Dos)
+    participant journeyTracking as Journery Tracking Solution
+    participant pds as Personal Demographics Service (PDS)
+    participant mns as Message Notification Service (MNS)
+    participant barsProxy as BARS Proxy
+    participant appointmentProvider as Care Setting Appointment Solution
+    participant LIMS as Laboratory Information Management System (LIMS) / Radiology Information System (RIS)
+    actor providerClinican as Provider Clinician
+    participant taskingSolution as Tasking Solution
+    participant nhsNotify as NHS Notify
+    
+
+
+    patient ->>+ nhsAppointmentBookingService: Route patient to appointment booking service
+    nhsAppointmentBookingService ->>+ serviceSelection: Request diagnostic test provider list with search criteria (e.g. location)
+    serviceSelection ->>+ nds: Request diagnostic test provider list with search criteria (e.g. location)
+    nds ->>+ pds: Request patient demographics
+    pds -->>- nds: Return patient demographics
+    nds ->>+ ndsDos: Request provider list including search criteria and patient demographics
+    ndsDos -->>- nds: Return provider list
+    nds -->>- serviceSelection: Return provider list
+    serviceSelection -->>- nhsAppointmentBookingService: Return provider list
+
+    loop Every Provider
+            nhsAppointmentBookingService ->>+ barsProxy: Request availability level 
+            barsProxy ->>+ appointmentProvider: Request availability level
+            appointmentProvider -->>- barsProxy: Return availability level
+            barsProxy -->>- nhsAppointmentBookingService: Return availability level
+    end
+    nhsAppointmentBookingService -->>- patient : Display available providers and availability summary
+
+    patient ->>+ nhsAppointmentBookingService: Patient selects provider
+    nhsAppointmentBookingService ->>+ mns: Create patient provider selection event
+    mns -->>- nhsAppointmentBookingService: Confirm event creation
+    mns ->> nds: Notify provider selection event
+    mns ->> LIMS: Notify provider selection event
+    LIMS ->> nds: Request diagnostic test request
+    nds -->> LIMS: Return diagnostic test request to provider
+    LIMS -> providerClinican: Vetting of patient and test order
+    providerClinican --> LIMS: Return vetting outcome
+    alt Patient booked appointment
+        providerClinican ->> appointmentProvider: Unlock appointment booking for patient
+        appointmentProvider ->> mns: Notify outcome of vetting and acceptance of patient
+        mns ->> nds: Notify diagnostic service of patient vetting outcome and acceptance of patient
+        nds ->> taskingSolution : Create Patient task for appointment booking
+        taskingSolution ->> nhsNotify : Notify patient of appointment booking task
+        nhsNotify -) patient : Notify patient of appointment booking task
+    else Provider allocated appointment
+        providerClinican ->> appointmentProvider: Assign patient appointment
+        appointmentProvider ->> mns: Create appointment booked event
+        mns ->> nds: receive appointment booked event
+        nds ->> nhsNotify: Notify patient of appointment booked
+        nhsNotify -) patient: Notify patient of appointment booked
+    end
+     

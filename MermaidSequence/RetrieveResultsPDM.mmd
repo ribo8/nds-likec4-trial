@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    actor requestingClinican
+    participant orderComms as Order Comms
+    participant mns as Message Notification Service (MNS)
+    
+    participant ndsResultsAPI as Test Results API
+    participant pdm as Patient Data Manager (PDM)
+    participant nds as National Diagnostic Service (NDS) Orchestrator
+    participant journeyTracking as Journery Tracking Solution
+    participant nhsNotify as NHS Notify
+    actor patient as Patient
+
+    mns ->> orderComms: New test result available event
+    orderComms ->>+ ndsResultsAPI: Request test result
+    ndsResultsAPI ->>+ pdm: Request test result
+    pdm -->>- ndsResultsAPI: Return test result
+    ndsResultsAPI ->>- orderComms: Return test result
+
+    requestingClinican ->> orderComms: View and interpret test results
+    orderComms ->> mns: Create Interpretted results available event
+    mns ->> nds: Receive Interpretted results available event
+    nds ->>+ journeyTracking: Update journey tracker
+    journeyTracking -->>- nds : Confirm update
+    nds -->> nhsNotify: Notify patient test results are available
+    nhsNotify -) patient: Notify patient test results are available
+    

@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor patient as Patient
+    participant nhsApp as NHS App
+    participant taskingSolution as Tasking Solution
+    participant nhsAppointmentBookingService as NHS Appointment Booking Service
+    participant nds as National Diagnostic Service (NDS) Orchestrator
+    participant barsProxy as BARS Proxy
+    participant appointmentProvider as Care Setting Appointment Solution
+    participant mns as Message Notification Service (MNS)
+    participant journeyTracking as Journery Tracking Solution
+
+    patient ->>+ nhsApp : Access Application
+    nhsApp ->>+ taskingSolution : Request list of patient tasks
+    taskingSolution -->>- nhsApp : Return list of patient tasks
+    nhsApp ->>- patient : Display list of patient tasks
+    patient ->>+ nhsApp: Patient selects appointment booking Task
+    nhsApp ->>+ nhsAppointmentBookingService: Route patient to appointment booking service
+    nhsAppointmentBookingService ->>+ barsProxy: Request available appointments for provider
+    barsProxy ->>+ appointmentProvider: Request available appointments for provider
+    appointmentProvider -->>- barsProxy: Return available appointments for provider
+    barsProxy -->>-  nhsAppointmentBookingService: Return available appointments for provider
+    nhsAppointmentBookingService -->>- nhsApp: Return available appointments for provider
+    nhsApp -->>- patient: Display available appointments to patient  
+    patient ->>+ nhsAppointmentBookingService: Patient selects appointment
+    nhsAppointmentBookingService ->>+ barsProxy: Book appointment with provider
+    barsProxy ->>+ appointmentProvider: Book appointment with provider
+    appointmentProvider -->>- barsProxy: Return appointment booked confirmation
+    barsProxy -->>- nhsAppointmentBookingService: Return appointment booked confirmation
+    par Notify Patient
+            nhsAppointmentBookingService -->>- patient: Display appointment booked confirmation to patient 
+
+    and Fire events and update journey tracker
+        nhsAppointmentBookingService ->>+ mns: New patient appointment event
+        mns -->>- nhsAppointmentBookingService: Confirm new patient appointment event created
+        mns ->> nds: Notify diagnostic service of new patient appointment
+        nds ->>+ journeyTracking : Update journey tracking status of appointment booking
+        journeyTracking -->>- nds : Confirm notification received
+    end 

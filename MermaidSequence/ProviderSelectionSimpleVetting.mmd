@@ -3,11 +3,10 @@ sequenceDiagram
     actor patient as Patient
     participant nhsAppointmentBookingService as NHS Appointment Booking Service
     participant serviceSelection as Service Selection
-    participant nds as National Diagnostic Service (NDS)
-    participant pds as Personal Demographics Service (PDS)
+    participant nds as National Diagnostic Service (NDS) Orchestrator
+    participant pds as Personal Demographics Service (PDS) 
     participant ndsDos as NDS Directory of Services (NDS Dos)
     participant journeyTracking as Journery Tracking Solution
-    participant pds as Personal Demographics Service (PDS)
     participant mns as Message Notification Service (MNS)
     participant barsProxy as BARS Proxy
     participant appointmentProvider as Care Setting Appointment Solution
@@ -22,21 +21,29 @@ sequenceDiagram
     ndsDos -->>- nds: Return provider list
     nds -->>- serviceSelection: Return provider list
     serviceSelection -->>- nhsAppointmentBookingService: Return provider list
-    loop Every Provider
+    loop Every Provider who offers appointments
             nhsAppointmentBookingService ->>+ barsProxy: Request available appointments for provider
             barsProxy ->>+ appointmentProvider: Request available appointments for provider
             appointmentProvider -->>- barsProxy: Return available appointments for provider
-            barsProxy -->>- nhsAppointmentBookingService: Return available appointments for provider
+            barsProxy -->>- nhsAppointmentBookingService: Return available appointments for provider 
     end
     nhsAppointmentBookingService -->>- patient : Display available providers and appointments to patient
-    patient ->>+ nhsAppointmentBookingService: Patient selects appointment at their chosen provider
-    nhsAppointmentBookingService ->>+ barsProxy: Book appointment with provider
-    barsProxy ->>+ appointmentProvider: Book appointment with provider
-    appointmentProvider -->>- barsProxy: Return appointment booked confirmation
-    barsProxy -->>- nhsAppointmentBookingService: Return appointment booked confirmation
-    nhsAppointmentBookingService -->>- patient: Return appointment booked confirmation 
-    nhsAppointmentBookingService ->>+ mns: New patient appointment event
-    mns -->- nhsAppointmentBookingService: Nofity of event creation
+    alt Patient Books Walk-in Centre
+        patient ->>+ nhsAppointmentBookingService: Patient selects walkin centre provider
+        nhsAppointmentBookingService ->>+ mns:  New patient booking walkin event
+        mns -->-  nhsAppointmentBookingService: Confirm event creation
+        
+    else Patient Books Appointment
+    
+        patient ->>+ nhsAppointmentBookingService: Patient selects appointment at their chosen provider
+        nhsAppointmentBookingService ->>+ barsProxy: Book appointment with provider
+        barsProxy ->>+ appointmentProvider: Book appointment with provider
+        appointmentProvider -->>- barsProxy: Return appointment booked confirmation
+        barsProxy -->>- nhsAppointmentBookingService: Return appointment booked confirmation
+        nhsAppointmentBookingService -->>- patient: Return appointment booked confirmation 
+        nhsAppointmentBookingService ->>+ mns: New patient appointment event
+        mns -->- nhsAppointmentBookingService: Confirm event creation
+    end 
     par MNS event to NDS
         mns ->> nds: Notify diagnostic service of new patient appointment
         nds ->>+ journeyTracking : Update journey tracking status of appointment booking
