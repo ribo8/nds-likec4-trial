@@ -13,8 +13,8 @@ views {
 
   }
 
-  view testOrderingView {
-    title 'NHS Online Diagnostic Test Ordering View'
+  view testRequestView {
+    title 'NHS Online Diagnostic Test Request View'
     include patient
     include nhsOnline, cis2, pdm, taskingSolution, nhsApp, nhsNotify
     include element.tag = #testRequestTag

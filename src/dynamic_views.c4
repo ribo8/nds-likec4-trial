@@ -12,17 +12,17 @@ views {
         
         
     }
-    dynamic view testOrder {
-        title 'Dynamic View - Test Ordering - Pathology/LIMS'
+    dynamic view testRequest {
+        title 'Dynamic View - Test Request - Pathology/LIMS'
         parallel {
             
             nhsOnline -> nds {
-                title 'Send test order'
+                title 'Send test request'
                 technology 'FHIR R4, REST API'
             }
 
             ndsOrderCommsPortal -> nds {
-                title 'Send test order from NDS Portal'
+                title 'Send test request from NDS Portal'
                 technology 'FHIR R4, REST API'
             }
         }
@@ -33,7 +33,7 @@ views {
         }
 
         taskingSolution -> mns {
-            title 'Subscribe to test order status updates event'
+            title 'Subscribe to test request status updates event'
             technology 'FHIR R4, REST API'
         } 
 
@@ -43,12 +43,12 @@ views {
         }
 
         diagnosticCentreType1.lims -> nds {
-            title 'Request test order details'
+            title 'Request test request details'
             technology 'FHIR R4, REST API'
         }
 
         diagnosticCentreType1.lims -> mns {
-            title 'Publish test order status updates event'
+            title 'Publish test ordrequester status updates event'
             technology 'FHIR R4, REST API'
         }
     }
