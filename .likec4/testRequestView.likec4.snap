@@ -5,13 +5,13 @@
   _stage: 'layouted',
   sourcePath: 'src/views.c4',
   description: null,
-  title: 'Diagnostic Test Ordering View',
-  id: 'testOrderingView',
+  title: 'NHS Online Diagnostic Test Request View',
+  id: 'testRequestView',
   autoLayout: {
     direction: 'TB',
   },
-  hash: 'OrAQ2J9LFaDprnwznHZKR92ExhSJ48r0hMkpk1mpjzk',
-  bounds: {
+  hash: 'TpS078f31N9oGBfOZ0EHiZo2ZFsW2iJpO51kmk2xGmQ',
+bounds: {
     x: -579,
     y: -203,
     width: 2626,
