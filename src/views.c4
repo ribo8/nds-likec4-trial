@@ -13,6 +13,10 @@ views {
 
   }
 
+  view exampleView {
+    title 'Simple Example View'
+    include nds, nhsOnline, diagnosticCentreType1.lims
+  }
   view testRequestView {
     title 'NHS Online Diagnostic Test Request View'
     include patient
